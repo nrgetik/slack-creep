@@ -1,5 +1,6 @@
 # slack-creep
-Attempts to discover and notify when a particular user (or users) sends a message in any (accessible) channel
+Attempts to discover and notify when a particular user (or users) sends
+a message in any (accessible) channel
 
 ## Usage
 ```Usage: slack-creep.py [OPTIONS]
@@ -12,3 +13,8 @@ Options:
                        Will also determine the sleep value between groups of
                        searches  [default: 60]
 ```
+
+### Notes
+The `say` command is only available on OS X. If you want to run this on
+Linux, comment those lines out or adapt the `say` function to use e.g.
+`espeak`

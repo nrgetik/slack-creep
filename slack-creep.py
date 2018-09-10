@@ -6,7 +6,7 @@ import requests
 from os import system
 from subprocess import call
 from sys import exit
-from time import sleep, time
+from time import localtime, sleep, strftime, time
 
 USERS = ['slackbot']
 
@@ -44,8 +44,12 @@ def main(token, users, age):
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
                         if time()-age-5 < match_ts < time() and not match["channel"]["is_private"]:
-                            print("{}\n{}\n#{} // @{}: {}".format("-"*80, match["permalink"],
-                                match["channel"]["name"], match["username"], match["text"]))
+                            print("{}\n{}\n#{} // @{} [{}]: {}".format("-"*80,
+                                match["permalink"],
+                                match["channel"]["name"],
+                                match["username"],
+                                strftime("%I:%M %p", localtime(match_ts)),
+                                match["text"]))
                             say("Greetings; {} has said a thing in {}".format(
                                 match["username"], match["channel"]["name"]))
                 sleep(0.125)
