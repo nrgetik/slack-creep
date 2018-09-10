@@ -43,7 +43,7 @@ def main(token, users, age):
                     else:
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
-                        if time()-age-5 < match_ts < time() and not match["channel"]["is_private"]:
+                        if time()-age-5 < match_ts < time() and match["channel"]["is_channel"]:
                             print("{}\n{}\n#{} // @{} [{}]: {}".format("-"*80,
                                 match["permalink"],
                                 match["channel"]["name"],
@@ -56,7 +56,7 @@ def main(token, users, age):
             sleep(age)
     except KeyboardInterrupt:
         exit(0)
-        
+
 
 if __name__ == "__main__":
     main()
