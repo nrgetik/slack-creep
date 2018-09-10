@@ -10,6 +10,11 @@ from time import sleep, time
 
 USERS = ['slackbot']
 
+
+def say(words):
+    call(["say", "-v", "Daniel", words])
+
+
 @click.command()
 @click.option("-t", "--token", is_flag=False, type=click.STRING, metavar="<token>", required=True,
               help="Slack API Token")
@@ -32,18 +37,17 @@ def main(token, users, age):
                 if r.status_code != requests.codes.ok:
                     r.raise_for_status()
                 else:
-                    match_ts = float(r.json()["messages"]["matches"][0]["ts"])
-                    if time()-age-5 < match_ts < time():
-                        print("{}\n{}\n#{} // @{}: {}".format(
-                             "-"*80,
-                             r.json()["messages"]["matches"][0]["permalink"],
-                             r.json()["messages"]["matches"][0]["channel"]["name"],
-                             r.json()["messages"]["matches"][0]["username"],
-                             r.json()["messages"]["matches"][0]["text"]))
-                        call(["say", "-v", "Daniel", "Greetings; {} has said a thing in {}".format(
-                            r.json()["messages"]["matches"][0]["username"],
-                            r.json()["messages"]["matches"][0]["channel"]["name"]
-                        )])
+                    if not r.json()["ok"]:
+                        print("Error: {}".format(r.json()["error"]))
+                        say("Error: {}".format(r.json()["error"]))
+                    else:
+                        match = r.json()["messages"]["matches"][0]
+                        match_ts = float(match["ts"])
+                        if time()-age-5 < match_ts < time() and not match["channel"]["is_private"]:
+                            print("{}\n{}\n#{} // @{}: {}".format("-"*80, match["permalink"],
+                                match["channel"]["name"], match["username"], match["text"]))
+                            say("Greetings; {} has said a thing in {}".format(
+                                match["username"], match["channel"]["name"]))
                 sleep(0.125)
             sleep(age)
     except KeyboardInterrupt:
