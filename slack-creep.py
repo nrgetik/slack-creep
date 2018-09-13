@@ -26,6 +26,8 @@ def say(words):
               "Will also determine the sleep value between groups of searches")
 def main(token, users, age):
     users = [u.strip() for u in users.split(",")]
+    mini_sleep = 0.25
+    age_pad = len(users) * (mini_sleep * 1.5)
     try:
         while True:
             for user in users:
@@ -43,7 +45,7 @@ def main(token, users, age):
                     else:
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
-                        if time()-age-5 < match_ts < time() and match["channel"]["is_channel"]:
+                        if time()-age-age_pad <= match_ts <= time() and match["channel"]["is_channel"]:
                             print("{}\n{}\n#{} // @{} [{}]: {}".format("-"*80,
                                 match["permalink"],
                                 match["channel"]["name"],
@@ -52,7 +54,7 @@ def main(token, users, age):
                                 match["text"]))
                             say("Greetings; {} has said a thing in {}".format(
                                 match["username"], match["channel"]["name"]))
-                sleep(0.125)
+                sleep(mini_sleep)
             sleep(age)
     except KeyboardInterrupt:
         exit(0)
