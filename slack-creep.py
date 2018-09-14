@@ -45,7 +45,8 @@ def main(token, users, age):
                     else:
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
-                        if time()-age-age_pad <= match_ts <= time() and match["channel"]["is_channel"]:
+                        now = time()
+                        if now-age-age_pad <= match_ts <= now and match["channel"]["is_channel"]:
                             print("{}\n{}\n#{} // @{} [{}]: {}".format("-"*80,
                                 match["permalink"],
                                 match["channel"]["name"],
