@@ -12,9 +12,11 @@ Options:
   -a, --age <age>      Maximum age, in seconds, of messages that are relevant.
                        Will also determine the sleep value between groups of
                        searches  [default: 60]
-```
+  -s, --say            Set this flag if you want notifications to say words to
+                       you  [default: False]
+  --help               Show this message and exit.
+  ```
 
 ### Notes
-The `say` command is only available on OS X. If you want to run this on
-Linux, comment those lines out or adapt the `say` function to use e.g.
-`espeak`
+The `say` and `afplay` commands are only available on OS X. This could easily
+be adapted to use equivalent commands on other platforms.
