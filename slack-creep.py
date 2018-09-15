@@ -11,8 +11,11 @@ from time import localtime, sleep, strftime, time
 USERS = ['slackbot']
 
 
-def say(words):
-    call(["say", "-v", "Daniel", words])
+def notify(words, say):
+    if say:
+        call(["say", "-v", "Daniel", words])
+    else:
+        call(["afplay", "/System/Library/Sounds/Glass.aiff"])
 
 
 @click.command()
@@ -24,7 +27,9 @@ def say(words):
 @click.option("-a", "--age", is_flag=False, default=60, show_default=True, type=click.INT,
               metavar="<age>", help="Maximum age, in seconds, of messages that are relevant. " \
               "Will also determine the sleep value between groups of searches")
-def main(token, users, age):
+@click.option("-s", "--say", is_flag=True, default=False, show_default=True, type=click.BOOL,
+              help="Set this flag if you want notifications to say words to you")
+def main(token, users, age, say):
     users = [u.strip() for u in users.split(",")]
     mini_sleep = 0.25
     age_pad = len(users) * (mini_sleep * 1.5)
@@ -41,7 +46,6 @@ def main(token, users, age):
                 else:
                     if not r.json()["ok"]:
                         print("Error: {}".format(r.json()["error"]))
-                        say("Error: {}".format(r.json()["error"]))
                     else:
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
@@ -53,8 +57,8 @@ def main(token, users, age):
                                 match["username"],
                                 strftime("%I:%M %p", localtime(match_ts)),
                                 match["text"]))
-                            say("Greetings; {} has said a thing in {}".format(
-                                match["username"], match["channel"]["name"]))
+                            notify("Greetings; {} has said a thing in {}".format(
+                                match["username"], match["channel"]["name"]), say)
                 sleep(mini_sleep)
             sleep(age)
     except KeyboardInterrupt:
