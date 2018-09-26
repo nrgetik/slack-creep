@@ -1,6 +1,6 @@
 # slack-creep
 Attempts to discover and notify when a particular user (or users) sends
-a message in any (accessible) channel
+a message in any (accessible) Slack channel
 
 ## Usage
 ```Usage: slack-creep.py [OPTIONS]
