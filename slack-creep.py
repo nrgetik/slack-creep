@@ -33,8 +33,8 @@ def main(token, users, age, say):
     users = [u.strip() for u in users.split(",")]
     mini_sleep = 0.25
     age_pad = len(users) * (mini_sleep * 1.5)
-    try:
-        while True:
+    while True:
+        try:
             for user in users:
                 payload = {"token": token,
                            "query": "from:@{}".format(user),
@@ -42,10 +42,13 @@ def main(token, users, age, say):
                            "sort": "timestamp"}
                 r = requests.get("https://slack.com/api/search.messages", params=payload)
                 if r.status_code != requests.codes.ok:
-                    r.raise_for_status()
+                    # r.raise_for_status()
+                    print("Status code error: {}".format(r.status_code))
+                    sleep(age)
                 else:
                     if not r.json()["ok"]:
-                        print("Error: {}".format(r.json()["error"]))
+                        print("Response error: {}".format(r.json()["error"]))
+                        sleep(age)
                     else:
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
@@ -61,8 +64,11 @@ def main(token, users, age, say):
                                 match["username"], match["channel"]["name"]), say)
                 sleep(mini_sleep)
             sleep(age)
-    except KeyboardInterrupt:
-        exit(0)
+        except requests.exceptions.RequestException as e:
+            print(e)
+            sleep(age)
+        except KeyboardInterrupt:
+            exit(0)
 
 
 if __name__ == "__main__":
