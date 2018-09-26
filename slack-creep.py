@@ -42,7 +42,6 @@ def main(token, users, age, say):
                            "sort": "timestamp"}
                 r = requests.get("https://slack.com/api/search.messages", params=payload)
                 if r.status_code != requests.codes.ok:
-                    # r.raise_for_status()
                     print("Status code error: {}".format(r.status_code))
                     sleep(age)
                 else:
@@ -65,7 +64,7 @@ def main(token, users, age, say):
                 sleep(mini_sleep)
             sleep(age)
         except requests.exceptions.RequestException as e:
-            print(e)
+            print("Exception: {}".format(e))
             sleep(age)
         except KeyboardInterrupt:
             exit(0)
