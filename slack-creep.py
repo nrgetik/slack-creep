@@ -11,8 +11,8 @@ from time import localtime, sleep, strftime, time
 USERS = ['slackbot']
 
 
-def notify(words, say):
-    if say:
+def notify(words, speak):
+    if speak:
         call(["say", "-v", "Daniel", words])
     else:
         call(["afplay", "/System/Library/Sounds/Glass.aiff"])
@@ -27,9 +27,9 @@ def notify(words, say):
 @click.option("-a", "--age", is_flag=False, default=60, show_default=True, type=click.INT,
               metavar="<age>", help="Maximum age, in seconds, of messages that are relevant. " \
               "Will also determine the sleep value between groups of searches")
-@click.option("-s", "--say", is_flag=True, default=False, show_default=True, type=click.BOOL,
-              help="Set this flag if you want notifications to say words to you")
-def main(token, users, age, say):
+@click.option("-s", "--speak", is_flag=True, default=False, show_default=True, type=click.BOOL,
+              help="Set this flag if you want notifications to speak to you")
+def main(token, users, age, speak):
     users = [u.strip() for u in users.split(",")]
     mini_sleep = 0.25
     age_pad = len(users) * (mini_sleep * 1.5)
@@ -48,7 +48,7 @@ def main(token, users, age, say):
                     if not r.json()["ok"]:
                         print("Response error: {}".format(r.json()["error"]))
                         sleep(age)
-                    else:
+                    elif r.json()["messages"]["total"] > 0:
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
                         now = time()
@@ -60,7 +60,7 @@ def main(token, users, age, say):
                                 strftime("%I:%M %p", localtime(match_ts)),
                                 match["text"]))
                             notify("Greetings; {} has said a thing in {}".format(
-                                match["username"], match["channel"]["name"]), say)
+                                match["username"], match["channel"]["name"]), speak)
                 sleep(mini_sleep)
             sleep(age)
         except requests.exceptions.RequestException as e:
