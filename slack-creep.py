@@ -63,12 +63,12 @@ def main(token, users, age, speak):
                                 match["username"], match["channel"]["name"]), speak)
                 sleep(mini_sleep)
             sleep(age)
+        except KeyboardInterrupt:
+            exit(0)
         # except requests.exceptions.RequestException as e:
         except Exception as e:
             print("Exception: {}".format(e))
             sleep(age)
-        except KeyboardInterrupt:
-            exit(0)
 
 
 if __name__ == "__main__":
