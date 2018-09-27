@@ -63,7 +63,8 @@ def main(token, users, age, speak):
                                 match["username"], match["channel"]["name"]), speak)
                 sleep(mini_sleep)
             sleep(age)
-        except requests.exceptions.RequestException as e:
+        # except requests.exceptions.RequestException as e:
+        except Exception as e:
             print("Exception: {}".format(e))
             sleep(age)
         except KeyboardInterrupt:
