@@ -5,7 +5,7 @@ import click
 import requests
 from os import system
 from subprocess import call
-from sys import exit
+from sys import exc_info, exit
 from time import localtime, sleep, strftime, time
 
 USERS = ['slackbot']
@@ -67,7 +67,7 @@ def main(token, users, age, speak):
             exit(0)
         # except requests.exceptions.RequestException as e:
         except Exception as e:
-            print("Exception: {}".format(e))
+            print("Exception: {} at line {}".format(e, exc_info()[2].tb_lineno))
             sleep(age)
 
 
