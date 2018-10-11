@@ -71,7 +71,7 @@ def main(token, users, age, speak):
             exit(0)
         # except requests.exceptions.RequestException as e:
         except Exception as e:
-            print("[{}] Exception: {} at line {}".format(dt_stamp(), e, exc_info()[2].tb_lineno))
+            print("{} Exception: {} at line {}".format(dt_stamp(), e, exc_info()[2].tb_lineno))
             sleep(age)
 
 
