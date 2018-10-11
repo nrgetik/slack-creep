@@ -37,7 +37,6 @@ def main(token, users, age, speak):
     users = [u.strip() for u in users.split(",")]
     mini_sleep = 0.25
     age_pad = len(users) * (mini_sleep * 1.5)
-    print(dt_stamp())
     while True:
         try:
             for user in users:
