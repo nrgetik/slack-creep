@@ -11,6 +11,10 @@ from time import localtime, sleep, strftime, time
 USERS = ['slackbot']
 
 
+def dt_stamp():
+    return strftime("[%Y-%m-%d %H:%M:%S]", localtime())
+
+
 def notify(words, speak):
     if speak:
         call(["say", "-v", "Daniel", words])
@@ -33,6 +37,7 @@ def main(token, users, age, speak):
     users = [u.strip() for u in users.split(",")]
     mini_sleep = 0.25
     age_pad = len(users) * (mini_sleep * 1.5)
+    print(dt_stamp())
     while True:
         try:
             for user in users:
@@ -42,11 +47,11 @@ def main(token, users, age, speak):
                            "sort": "timestamp"}
                 r = requests.get("https://slack.com/api/search.messages", params=payload)
                 if r.status_code != requests.codes.ok:
-                    print("Status code error: {}".format(r.status_code))
+                    print("{} Status code error: {}".format(dt_stamp(), r.status_code))
                     sleep(age)
                 else:
                     if not r.json()["ok"]:
-                        print("Response error: {}".format(r.json()["error"]))
+                        print("{} Response error: {}".format(dt_stamp(), r.json()["error"]))
                         sleep(age)
                     elif r.json()["messages"]["total"] > 0:
                         match = r.json()["messages"]["matches"][0]
@@ -67,8 +72,7 @@ def main(token, users, age, speak):
             exit(0)
         # except requests.exceptions.RequestException as e:
         except Exception as e:
-            print("[{}] Exception: {} at line {}".format(e, exc_info()[2].tb_lineno,
-                strftime("%Y-%m-%d %H:%M:%S", localtime())))
+            print("[{}] Exception: {} at line {}".format(dt_stamp(), e, exc_info()[2].tb_lineno))
             sleep(age)
 
 
