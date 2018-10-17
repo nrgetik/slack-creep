@@ -35,8 +35,8 @@ def notify(words, speak):
               help="Set this flag if you want notifications to speak to you")
 def main(token, users, age, speak):
     users = [u.strip() for u in users.split(",")]
-    mini_sleep = 0.25
-    age_pad = len(users) * (mini_sleep * 1.5)
+    mini_sleep = 0.125
+    age_pad = max(len(users)*mini_sleep, 5)
     while True:
         try:
             for user in users:
