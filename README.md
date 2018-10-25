@@ -14,6 +14,7 @@ Options:
                        searches  [default: 60]
   -s, --speak          Set this flag if you want notifications to speak to you
                        [default: False]
+  -d, --debug          Enable debug output  [default: False]
   --help               Show this message and exit.
 ```
 
