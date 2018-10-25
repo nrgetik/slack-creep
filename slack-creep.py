@@ -35,8 +35,8 @@ def notify(words, speak):
               help="Set this flag if you want notifications to speak to you")
 def main(token, users, age, speak):
     users = [u.strip() for u in users.split(",")]
-    mini_sleep = 0.125
-    age_pad = max(len(users)*mini_sleep, 5)
+    then_pad = 8
+    now_pad = 2
     while True:
         try:
             for user in users:
@@ -56,16 +56,20 @@ def main(token, users, age, speak):
                         match = r.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
                         now = time()
-                        if now-age-age_pad <= match_ts <= now and match["channel"]["is_channel"]:
+                        then = now - age - then_pad
+                        now = now + now_pad
+                        if then <= match_ts <= now and match["channel"]["is_channel"]:
                             print("{}\n{}\n#{} // @{} [{}]: {}".format("-"*80,
                                 match["permalink"],
                                 match["channel"]["name"],
                                 match["username"],
-                                strftime("%I:%M %p", localtime(match_ts)),
+                                strftime("%I:%M:%S %p", localtime(match_ts)),
                                 match["text"]))
+                            print("*** Then: {}, Now: {} ***".format(
+                                strftime("%I:%M:%S %p", localtime(then)),
+                                strftime("%I:%M:%S %p", localtime(now))))
                             notify("Greetings; {} has said a thing in {}".format(
                                 match["username"], match["channel"]["name"]), speak)
-                sleep(mini_sleep)
             sleep(age)
         except KeyboardInterrupt:
             exit(0)
