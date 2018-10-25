@@ -33,7 +33,9 @@ def notify(words, speak):
               "Will also determine the sleep value between groups of searches")
 @click.option("-s", "--speak", is_flag=True, default=False, show_default=True, type=click.BOOL,
               help="Set this flag if you want notifications to speak to you")
-def main(token, users, age, speak):
+@click.option("-d", "--debug", is_flag=True, default=False, show_default=True, type=click.BOOL,
+              help="Enable debug output")
+def main(token, users, age, speak, debug):
     users = [u.strip() for u in users.split(",")]
     then_pad = 8
     now_pad = 2
@@ -63,11 +65,13 @@ def main(token, users, age, speak):
                                 match["permalink"],
                                 match["channel"]["name"],
                                 match["username"],
-                                strftime("%I:%M:%S %p", localtime(match_ts)),
+                                strftime("%H:%M:%S", localtime(match_ts)),
                                 match["text"]))
-                            print("*** Then: {}, Now: {} ***".format(
-                                strftime("%I:%M:%S %p", localtime(then)),
-                                strftime("%I:%M:%S %p", localtime(now))))
+                            if debug:
+                                print("DEBUG: {} <= {} <= {}".format(
+                                    strftime("%H:%M:%S", localtime(then)),
+                                    strftime("%H:%M:%S", localtime(match_ts)),
+                                    strftime("%H:%M:%S", localtime(now))))
                             notify("Greetings; {} has said a thing in {}".format(
                                 match["username"], match["channel"]["name"]), speak)
             sleep(age)
