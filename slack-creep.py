@@ -37,7 +37,7 @@ def notify(words, speak):
               help="Enable debug output")
 def main(token, users, age, speak, debug):
     users = [u.strip() for u in users.split(",")]
-    then_pad = 10
+    then_pad = 12
     now_pad = 5
     while True:
         try:
