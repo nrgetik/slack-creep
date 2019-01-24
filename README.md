@@ -30,5 +30,5 @@ Options:
 ### Notes
 
 1. This has been developed on and tested with `python3`
-2. The `say` and `afplay` commands are only available on OS X. The source code could easily be
-adapted to use equivalent commands on other platforms
+2. The `say` and `afplay` commands are only available on OS X. This code could easily be adapted
+to use similar utilities available on other platforms
