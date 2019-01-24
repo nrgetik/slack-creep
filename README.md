@@ -1,6 +1,15 @@
 # slack-creep
-Attempts to discover and notify when a particular user (or users) sends
-a message in any (accessible) Slack channel
+Attempts to discover and notify when a particular user (or users) sends a message in any Slack
+channel accessible to the user associated with the specified
+[API Token](https://api.slack.com/custom-integrations/legacy-tokens)
+
+## Installation
+
+Something like:
+
+1. `git clone git@github.com:nrgetik/slack-creep.git`
+2. `mkvirtualenv slack-creep`
+3. `pip install -r requirements.txt`
 
 ## Usage
 ```Usage: slack-creep.py [OPTIONS]
@@ -19,5 +28,7 @@ Options:
 ```
 
 ### Notes
-The `say` and `afplay` commands are only available on OS X. This could easily
-be adapted to use equivalent commands on other platforms.
+
+1. This has been developed on and tested with `python3`
+2. The `say` and `afplay` commands are only available on OS X. The source code could easily be
+adapted to use equivalent commands on other platforms
