@@ -3,9 +3,9 @@
 
 from subprocess import call
 from time import localtime, sleep, strftime, time
+import sys
 import requests
 import click
-import sys
 
 USERS = ['slackbot']
 
