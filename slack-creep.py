@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import click
-import requests
-from os import system
 from subprocess import call
-from sys import exc_info, exit
 from time import localtime, sleep, strftime, time
+import requests
+import click
+import sys
 
 USERS = ['slackbot']
 
@@ -46,22 +45,23 @@ def main(token, users, age, speak, debug):
                            "query": "from:@{}".format(user),
                            "count": 1,
                            "sort": "timestamp"}
-                r = requests.get("https://slack.com/api/search.messages", params=payload)
-                if r.status_code != requests.codes.ok:
-                    print("{} Status code error: {}".format(dt_stamp(), r.status_code))
+                response = requests.get("https://slack.com/api/search.messages", params=payload)
+                if response.status_code != requests.codes.ok:
+                    print("{} Status code error: {}".format(dt_stamp(), response.status_code))
                     sleep(age)
                 else:
-                    if not r.json()["ok"]:
-                        print("{} Response error: {}".format(dt_stamp(), r.json()["error"]))
+                    if not response.json()["ok"]:
+                        print("{} Response error: {}".format(dt_stamp(), response.json()["error"]))
                         sleep(age)
-                    elif r.json()["messages"]["total"] > 0:
-                        match = r.json()["messages"]["matches"][0]
+                    elif response.json()["messages"]["total"] > 0:
+                        match = response.json()["messages"]["matches"][0]
                         match_ts = float(match["ts"])
                         now = time()
                         then = now - age - then_pad
                         now = now + now_pad
                         if then <= match_ts <= now and match["channel"]["is_channel"]:
-                            print("{}\n{}\n#{} // @{} [{}]: {}".format("-"*80,
+                            print("{}\n{}\n#{} // @{} [{}]: {}".format(
+                                "-"*80,
                                 match["permalink"],
                                 match["channel"]["name"],
                                 match["username"],
@@ -76,10 +76,11 @@ def main(token, users, age, speak, debug):
                                 match["username"], match["channel"]["name"]), speak)
             sleep(age)
         except KeyboardInterrupt:
-            exit(0)
-        # except requests.exceptions.RequestException as e:
-        except Exception as e:
-            print("{} Exception: {} at line {}".format(dt_stamp(), e, exc_info()[2].tb_lineno))
+            sys.exit(0)
+        # except requests.exceptions.RequestException as exception:
+        except Exception as exception:
+            print("{} Exception: {} at line {}".format(
+                dt_stamp(), exception, sys.exc_info()[2].tb_lineno))
             sleep(age)
 
 
